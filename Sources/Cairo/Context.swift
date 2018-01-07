@@ -137,6 +137,10 @@ public final class Context {
         cairo_clip_preserve(internalPointer)
     }
     
+    public func resetClip() {
+        cairo_reset_clip(internalPointer)
+    }
+
     public func paint(alpha: Double? = nil) {
         
         if let alpha = alpha {

@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,24 +6,46 @@ import PackageDescription
 let package = Package(
     name: "Cairo",
     products: [
-        // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
             name: "Cairo",
             targets: ["Cairo"]),
-        ],
-    dependencies: [
-        .package(url: "https://github.com/timbertson/CCairo.git", .branch("master")),
-        .package(url: "https://github.com/PureSwift/CFontConfig.git", .branch("master")),
-        .package(url: "https://github.com/PureSwift/CFreeType.git", .branch("master"))
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "Cairo",
-            dependencies: []),
+            dependencies: [
+                "CCairo",
+                "CFontConfig",
+                "CFreeType"
+            ]
+        ),
         .testTarget(
             name: "CairoTests",
-            dependencies: ["Cairo"]),
-        ]
+            dependencies: [
+                "Cairo"
+            ]
+        ),
+        .systemLibrary(
+            name: "CCairo",
+            pkgConfig: "cairo",
+            providers: [
+                .brew(["cairo"]),
+                .apt(["libcairo2-dev"])
+            ]),
+        .systemLibrary(
+            name: "CFontConfig",
+            pkgConfig: "fontconfig",
+            providers: [
+                .brew(["fontconfig"]),
+                .apt(["libfontconfig-dev"])
+            ]),
+        .systemLibrary(
+            name: "CFreeType",
+            pkgConfig: "freetype",
+            providers: [
+                .brew(["freetype2"]),
+                .apt(["libfreetype6-dev"])
+            ])
+    ],
+    swiftLanguageVersions: [.v5]
 )
